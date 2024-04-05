@@ -18,7 +18,8 @@ class Order
                     "amount": {
                         "currency_code": "MYR",
                         "value": "10.00"
-                    }
+                    },
+                    "payment_method": "paypal"
                 }
             ],
             "payment_source": {
@@ -31,6 +32,7 @@ class Order
                         "user_action": "PAY_NOW",
                         "return_url": "https://example.com/returnUrl",
                         "cancel_url": "https://example.com/cancelUrl"
+                        
                     }
                 }
             }
@@ -42,8 +44,19 @@ class Order
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
         $response = curl_exec($ch);
-        return $response;
+
+        $httpStatus = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        if ($httpStatus != 200) {
+            http_response_code($httpStatus);
+            echo json_encode(array(
+                "code" => $httpStatus,
+                "error" => "failed to create order"
+            ));
+            return false;
+        }
+
+
+        return json_decode($response, true);
     }
 }

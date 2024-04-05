@@ -53,11 +53,13 @@ $order = $orderMember->createOrderforSubscribe(
     $root_url
 );
 
-var_dump($order);
+if (!$order) {
+    return;
+}
 
-// echo json_encode(array(
-//     "order" => $order
-// ));
+echo json_encode(array(
+    "order" => $order
+));
 
 
 // step 3: insert data
