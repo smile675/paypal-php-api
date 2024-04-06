@@ -31,8 +31,8 @@ class GlobalFunctions
 
     public function updateRecord($t_id)
     {
-        $t_id = mysqli_real_escape_string($this->db, $t_id);
-        $query = "UPDATE record SET p_status = TRUE WHERE t_id = $t_id";
+        // $t_id = mysqli_real_escape_string($this->db, $t_id);
+        $query = "UPDATE record SET p_status = TRUE WHERE t_id = '$t_id'";
         $result = mysqli_query($this->db, $query);
         return $result;
     }
