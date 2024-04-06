@@ -13,23 +13,32 @@ $webhookData = json_decode($raw_post_data, true);
 $orderId = $webhookData['resource']['id'];
 
 if (!isset($orderId)) {
+    http_response_code(500);
     return;
 }
 
-echo "order id: " . $orderId . "\n";
+
 
 // Extract payment status
 $paymentStatus = $webhookData['resource']['status'];
 
+
 if (!isset($paymentStatus)) {
+    http_response_code(500);
     return;
+}
+
+$database = new Database();
+$db = $database->getConnection();
+$member = new GlobalFunctions($db);
+
+if ($paymentStatus == "APPROVED") {
+    $member->updateRecord($orderId);
+} else {
+    http_response_code(400);
+    echo "payment not approved: status: $paymentStatus";
 }
 
 
 
 // 
-$database = new Database();
-$db = $database->getConnection();
-$member = new GlobalFunctions($db);
-
-$member->updateRecord($orderId);
