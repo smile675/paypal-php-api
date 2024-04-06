@@ -57,19 +57,32 @@ if (!$order) {
     return;
 }
 
+// echo json_encode(array(
+//     "order" => $order
+// ));
+$orderId = $order['id'];
+$paymentLink = null;
+foreach ($order['links'] as $link) {
+    if ($link['rel'] === 'payer-action') {
+        $paymentLink = $link['href'];
+        break;
+    }
+}
+
+//step 3: insert data
+
+$insertrecord = $member->insertRecord($email, $orderId);
+if (!$insertrecord) {
+    http_response_code(500);
+    echo json_encode(array(
+        "code" => 500,
+        "error" => "could not insert data"
+    ));
+    return;
+}
+
+// step 4 send response data
+
 echo json_encode(array(
-    "order" => $order
+    "payment-link" => $paymentLink
 ));
-
-
-// step 3: insert data
-
-// $insertrecord = $member->insertRecord($email, "01234");
-// if (!$insertrecord) {
-//     http_response_code(500);
-//     echo json_encode(array(
-//         "code" => 500,
-//         "error" => "could not insert data"
-//     ));
-//     return;
-// }

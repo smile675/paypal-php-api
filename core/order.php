@@ -31,8 +31,7 @@ class Order
                         "landing_page": "LOGIN",
                         "user_action": "PAY_NOW",
                         "return_url": "https://example.com/returnUrl",
-                        "cancel_url": "https://example.com/cancelUrl"
-                        
+                        "cancel_url": "https://example.com/cancelUrl"                        
                     }
                 }
             }
